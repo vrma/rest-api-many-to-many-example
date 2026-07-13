@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -103,5 +104,24 @@ public class TagController {
         tag.setName(tagRequest.getName());
 
         return new ResponseEntity<>(tagRepository.save(tag), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/tutorials/{tutorialId}/tags/{tagId}")
+    public ResponseEntity<HttpStatus> deleteTagFromTutorial(@PathVariable Long tutorialId,
+            @PathVariable Long tagId) {
+        Tutorial tutorial = tutorialRepository.findById(tutorialId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId));
+
+        tutorial.removeTag(tagId);
+        tutorialRepository.save(tutorial);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/tags/{id}")
+    public ResponseEntity<HttpStatus> deleteTag(@PathVariable long id) {
+        tagRepository.deleteById(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
