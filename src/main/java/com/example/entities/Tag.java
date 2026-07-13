@@ -38,8 +38,8 @@ public class Tag implements Serializable {
     private long id;
     private String name;
 
-    @Builder.Default
+    
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "tags")
     @JsonIgnore
-    private Set<Tutorial> tutorials = new HashSet<>();
+    private final Set<Tutorial> tutorials = new HashSet<>();
 }
